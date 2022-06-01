@@ -418,7 +418,8 @@ class TwoTapeTuringMachine:
                 TM.add_transition(we_back_at_it_again + 13, TuringMachineTransition(BABAMBABAM, we_back_at_it_again + 14, BABAMBABAM, 'L'))
                 # it is over. or is it?
                 TM.add_transition(we_back_at_it_again + 14, TuringMachineTransition(BABAMBABAM, STATE_OFFSET + curr_target * STATES_PER_STATE, BABAMBABAM, 'L'))
-
+            
+            # this will be the accept state
             TM.add_state()
 
         ################################################################################
