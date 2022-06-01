@@ -194,7 +194,7 @@ class TwoTapeTuringMachine:
         SECOND_BRANCH_LENGTH = 32-7
         FIRST_BRANCH_LENGTH = SECOND_BRANCH_LENGTH * 3 + 4
         STATES_PER_STATE = FIRST_BRANCH_LENGTH * 3 + 3
-        for i in range(len(self.state_transitions)):
+        for i in range(len(self.state_transitions) - 1):
             ####240 ONE-TAPE-MACHINE STATES FOR EACH TWO-TAPE-MACHINE STATE####
             for j in range(STATES_PER_STATE):
                 TM.add_state()
@@ -242,7 +242,7 @@ class TwoTapeTuringMachine:
                 # update the dotted symbol and move one unit to the right
                 TM.add_transition(branching_point, TuringMachineTransition(SYMBOL_ZERO_DOT, 
                 branching_point + 1 + FIRST_BRANCH_LENGTH * 0,
-                DOT_SYMBOLS[NONDOT_SYMBOLS.index[has_zero_1]], 'R'))
+                DOT_SYMBOLS[NONDOT_SYMBOLS.index(has_zero_1)], 'R'))
                 
                 # loop over all nondot symbols
                 TM.add_transition(branching_point + 1, TuringMachineTransition('0', branching_point + 1, '0', 'R'))
@@ -292,7 +292,7 @@ class TwoTapeTuringMachine:
                     # update the dotted symbol and move one unit to the right
                     TM.add_transition(another_branching_point, TuringMachineTransition(SYMBOL_ZERO_DOT, 
                     another_branching_point + 1 + SECOND_BRANCH_LENGTH * 0,
-                    DOT_SYMBOLS[NONDOT_SYMBOLS.index[has_zero_2]], 'R'))
+                    DOT_SYMBOLS[NONDOT_SYMBOLS.index(has_zero_2)], 'R'))
 
                     # loop over all nondot symbols
                     TM.add_transition(another_branching_point + 1, TuringMachineTransition('0', another_branching_point + 1, '0', 'R'))
