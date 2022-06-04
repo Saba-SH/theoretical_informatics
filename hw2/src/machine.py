@@ -419,8 +419,8 @@ class TwoTapeTuringMachine:
                 # it is over. or is it?
                 TM.add_transition(we_back_at_it_again + 14, TuringMachineTransition(BABAMBABAM, STATE_OFFSET + curr_target * STATES_PER_STATE, BABAMBABAM, 'L'))
             
-            # this will be the accept state
-            TM.add_state()
+        # this will be the accept state
+        TM.add_state()
 
         ################################################################################
         """Return the constructed single-tape turing machine at the end"""
