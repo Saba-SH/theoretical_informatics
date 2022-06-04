@@ -61,6 +61,6 @@ do
             fi
         fi
     done
-    printf "\n~~~~~~~~~~~TEST $I FINISHED~~~~~~~~~~~\n"
+    printf "\n~~~~~~~~~~~TEST $I FINISHED~~~~~~~~~~~\n\n"
     
 done
