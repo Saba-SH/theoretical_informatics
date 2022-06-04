@@ -200,9 +200,9 @@ class TwoTapeTuringMachine:
         NONBRANCH_STATES = 3
         # branch for second read symbol
         SECOND_BRANCH_LENGTH = STATES_PER_TRANSITION - 7
-        # branch for every state for every pair that can be read from the two tapes
+        # branch for first read symbol
         FIRST_BRANCH_LENGTH = SECOND_BRANCH_LENGTH * 3 + 7 - NONBRANCH_STATES
-        # one-tape machine states for every two-tape machine state
+        # amount of one-tape machine states for every two-tape machine state
         STATES_PER_STATE = NONBRANCH_STATES + FIRST_BRANCH_LENGTH * 3
         for i in range(len(self.state_transitions) - 1):
             ####240 ONE-TAPE-MACHINE STATES FOR EACH TWO-TAPE-MACHINE STATE####
@@ -238,7 +238,7 @@ class TwoTapeTuringMachine:
                         '0' + SYMBOL_EMPTY, '00', '01',
                         '1' + SYMBOL_EMPTY, '10', '11']
             
-            # loop over all the read pairs and add states to perform the transitions
+            # loop over all the read pairs and add necessary transitions
             for pair_index in range(len(all_pairs)):
                 # the pair to be read from the tape
                 curr_read_pair = all_pairs[pair_index]
