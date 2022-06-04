@@ -48,7 +48,7 @@ class TuringMachine:
             # increase length of tape if head is past it
             while len(self.tape) <= self.head:
                 self.tape.append(SYMBOL_EMPTY)
-                self.tape.append(SYMBOL_EMPTY)
+                # self.tape.append(SYMBOL_EMPTY)
             
             # symbol read from tape
             c_read = self.tape[self.head]
@@ -194,7 +194,7 @@ class TwoTapeTuringMachine:
         # How many states we need for a single transition
         STATES_PER_TRANSITION = 32
         # States that every state has regardless its transitions
-        NONBRANCH_STATES = 2
+        NONBRANCH_STATES = 3
         # branch for every state for every pair that can be read from the two tapes
         BRANCH_LENGTH = STATES_PER_TRANSITION - NONBRANCH_STATES
         # one-tape machine states for every two-tape machine state
@@ -213,8 +213,8 @@ class TwoTapeTuringMachine:
             TM.add_transition(beninging, TuringMachineTransition(SYMBOL_EMPTY, beninging, SYMBOL_EMPTY, 'R'))
 
             # go one unit past the dotted symbol
-            for DOT_SYMBOL in DOT_SYMBOLS:
-                TM.add_transition(beninging, TuringMachineTransition(DOT_SYMBOL, beninging + 1, DOT_SYMBOL, 'R'))
+            for dot_symbol in DOT_SYMBOLS:
+                TM.add_transition(beninging, TuringMachineTransition(dot_symbol, beninging + 1, dot_symbol, 'R'))
 
             # come back to the dotted symbol
             TM.add_transition(beninging + 1, TuringMachineTransition(BABAMBABAM, beninging + 2, BABAMBABAM, 'L'))
