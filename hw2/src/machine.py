@@ -310,12 +310,14 @@ class TwoTapeTuringMachine:
                 common_point_1 = second_head_move_point + 5
                 
                 if curr_directions[1] == 'L':
-                    # left movement is easy: move the dot to the left
+                    # left movement is easy: move the dot to the left. If the dot is at the beginning of the tape, don't move it
                     for dot_symbol in DOT_SYMBOLS:
                         TM.add_transition(second_head_move_point, TuringMachineTransition(dot_symbol, second_head_move_point + 3,
                                     NONDOT_SYMBOLS[DOT_SYMBOLS.index(dot_symbol)], 'L'))
                         TM.add_transition(second_head_move_point + 3, TuringMachineTransition(NONDOT_SYMBOLS[DOT_SYMBOLS.index(dot_symbol)],
                                     second_head_move_point + 4, dot_symbol, 'L'))
+                    TM.add_transition(second_head_move_point + 3, TuringMachineTransition(BABAMBABAM, second_head_move_point + 3, 
+                                    BABAMBABAM, 'R'))
                 else:
                     for dot_symbol in DOT_SYMBOLS:
                         # simple case
@@ -351,12 +353,13 @@ class TwoTapeTuringMachine:
                 common_point_2 = first_head_move_point + 13
                 if curr_directions[0] == 'L':
                     # left direction is easy again
-                    # we reject if the head is at the leftmost point BTW
                     for dot_symbol in DOT_SYMBOLS:
                         TM.add_transition(first_head_move_point, TuringMachineTransition(dot_symbol, first_head_move_point + 11,
                                     NONDOT_SYMBOLS[DOT_SYMBOLS.index(dot_symbol)], 'L'))
                         TM.add_transition(first_head_move_point + 11, TuringMachineTransition(NONDOT_SYMBOLS[DOT_SYMBOLS.index(dot_symbol)],
                                     first_head_move_point + 12, dot_symbol, 'L'))
+                    TM.add_transition(first_head_move_point + 11, TuringMachineTransition(BABAMBABAM, first_head_move_point + 11,
+                                    BABAMBABAM, 'R'))
                 else:
                     for dot_symbol in DOT_SYMBOLS:
                         # simple case
@@ -397,6 +400,7 @@ class TwoTapeTuringMachine:
                     TM.add_transition(first_head_move_point + 11, TuringMachineTransition(SYMBOL_EMPTY_DOT, first_head_move_point + 12, 
                                 SYMBOL_EMPTY_DOT, 'L'))
                 # go left, to the common state
+                TM.add_transition(first_head_move_point + 12, TuringMachineTransition(BABAMBABAM, common_point_2, BABAMBABAM, 'L'))
                 for nondot_symbol in NONDOT_SYMBOLS:
                     TM.add_transition(first_head_move_point + 12, TuringMachineTransition(nondot_symbol, common_point_2, nondot_symbol, 'L'))
                 # loop left
