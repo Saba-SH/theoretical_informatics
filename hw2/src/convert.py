@@ -16,7 +16,7 @@ def main():
 
     TM = TTTM.to_single_tape()
 
-    print(TM.to_string())
+    print(TM.to_string(), end="")
 
 
 if __name__ == "__main__":
