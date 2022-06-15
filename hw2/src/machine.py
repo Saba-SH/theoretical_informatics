@@ -1,10 +1,10 @@
 SYMBOL_EMPTY = '_'
 # to separate two tapes of the two-tape turing machine
-BABAMBABAM = ':'
+BABAMBABAM = 'H'
 # two-tape turing machines will only have 0 and 1 symbols on their tape. dots will mark the two heads
 SYMBOL_ZERO_DOT = 'O'
 SYMBOL_ONE_DOT = 'I'
-SYMBOL_EMPTY_DOT = '^'
+SYMBOL_EMPTY_DOT = 'E'
 # keep lists of possible symbols for the sake of convenience
 NONDOT_SYMBOLS = ['0', '1', SYMBOL_EMPTY]
 DOT_SYMBOLS = [SYMBOL_ZERO_DOT, SYMBOL_ONE_DOT, SYMBOL_EMPTY_DOT]
@@ -37,8 +37,8 @@ class TuringMachine:
     def add_transition(self, from_index : int, transition : TuringMachineTransition):
         self.state_transitions[from_index].update(transition.dictized())
 
-    def run(self, input : str) -> str:
-        for symbol in input:
+    def run(self, input_string : str) -> str:
+        for symbol in input_string:
             self.tape.append(symbol)
 
         # start at state with index 0
@@ -83,6 +83,11 @@ class TuringMachine:
             run_result += str(curr_state_index) + "\n"
 
         return run_result
+
+    # empties the tape and moves head to the beginning of the tape
+    def reset(self):
+        self.tape = []
+        self.head = 0
 
     # returns a string representation of the machine in the form:
     # {total count of states}
@@ -418,3 +423,52 @@ class TwoTapeTuringMachine:
         ################################################################################
         """Return the constructed single-tape turing machine at the end"""
         return TM
+    
+    def run(self, input_string : str) -> str:
+        for symbol in input_string:
+            self.tape1.append(symbol)
+
+        curr_state_index = 0
+        run_result = ""
+        while True:
+            while len(self.tape1) <= self.head1:
+                self.tape1.append(SYMBOL_EMPTY)
+            while len(self.tape2) <= self.head2:
+                self.tape2.append(SYMBOL_EMPTY)
+            
+            ss_read = self.tape1[self.head1] + self.tape2[self.head2]
+
+            if ss_read not in self.state_transitions[curr_state_index]:
+                run_result += "-1"
+                break
+
+            trans = self.state_transitions[curr_state_index][ss_read]
+
+            self.tape1[self.head1] = trans[1][0]
+            self.tape2[self.head2] = trans[1][1]
+
+            if trans[2][0].upper() == 'L':
+                self.head1 = 0 if self.head1 == 0 else self.head1 - 1
+            elif trans[2][0].upper() == 'R':
+                self.head1 = self.head1 + 1
+            
+            if trans[2][1].upper() == 'L':
+                self.head2 = 0 if self.head2 == 0 else self.head2 - 1
+            elif trans[2][1].upper() == 'R':
+                self.head2 = self.head2 + 1
+
+            if trans[0] == len(self.state_transitions) - 1:
+                run_result += str(len(self.state_transitions) - 1)
+                break
+
+            curr_state_index = trans[0]
+
+            run_result += str(curr_state_index) + "\n"
+        
+        return run_result
+
+    def reset(self):
+        self.tape1 = []
+        self.tape2 = []
+        self.head1 = 0
+        self.head2 = 0
