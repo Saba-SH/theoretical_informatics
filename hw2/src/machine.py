@@ -200,7 +200,7 @@ class TwoTapeTuringMachine:
             2. Move right to left, moving the dots left to right as necessary. Might need to shift things to the right."""
         # The states will branch for the read options of the two-tape turing machine
         # How many states we need for a single transition
-        STATES_PER_TRANSITION = 32
+        STATES_PER_TRANSITION = 34
         # States that every state has regardless its transitions
         NONBRANCH_STATES = 3
         # branch for second read symbol
@@ -210,7 +210,7 @@ class TwoTapeTuringMachine:
         # amount of one-tape machine states for every two-tape machine state
         STATES_PER_STATE = NONBRANCH_STATES + FIRST_BRANCH_LENGTH * 3
         for i in range(len(self.state_transitions) - 1):
-            ####240 ONE-TAPE-MACHINE STATES FOR EACH TWO-TAPE-MACHINE STATE####
+            ####258 ONE-TAPE-MACHINE STATES FOR EACH TWO-TAPE-MACHINE STATE####
             # but hey, it's O(1)
             for j in range(STATES_PER_STATE):
                 TM.add_state()
@@ -260,9 +260,9 @@ class TwoTapeTuringMachine:
 
                 # we branch first at the first read symbol
                 first_branch_start = first_branching_point + 1 + FIRST_BRANCH_LENGTH * (pair_index // 3)
-                ## change the current dotted read symbol with the dotted equivalent of the write symbol
+                ## branch to keep track of which symbol we read first
                 TM.add_transition(first_branching_point, TuringMachineTransition(DOT_SYMBOLS[NONDOT_SYMBOLS.index(curr_read_pair[0])], 
-                                first_branch_start, DOT_SYMBOLS[NONDOT_SYMBOLS.index(curr_write_pair[0])], 'R'))
+                                first_branch_start, DOT_SYMBOLS[NONDOT_SYMBOLS.index(curr_read_pair[0])], 'R'))
 
                 # loop right in the same state
                 for nondot_symbol in NONDOT_SYMBOLS:
@@ -288,29 +288,48 @@ class TwoTapeTuringMachine:
                 second_branch_start = second_branching_point + 1 + SECOND_BRANCH_LENGTH * (pair_index % 3)
                 ## change the current dotted read symbol with the dotted equivalent of the write symbol
                 TM.add_transition(second_branching_point, TuringMachineTransition(DOT_SYMBOLS[NONDOT_SYMBOLS.index(curr_read_pair[1])], 
-                                second_branch_start, DOT_SYMBOLS[NONDOT_SYMBOLS.index(curr_write_pair[1])], 'R'))
+                                second_branch_start, DOT_SYMBOLS[NONDOT_SYMBOLS.index(curr_write_pair[1])], 'L'))
+                
+                # loop left in the same state until we see the first dotted symbol
+                TM.add_transition(second_branch_start, TuringMachineTransition(BABAMBABAM, second_branch_start, BABAMBABAM, 'L'))
+                for nondot_symbol in NONDOT_SYMBOLS:
+                    TM.add_transition(second_branch_start, TuringMachineTransition(nondot_symbol, second_branch_start, nondot_symbol, 'L'))
+
+                ## change the current dotted symbol with the dotted equivalent of the write symbol
+                TM.add_transition(second_branch_start, TuringMachineTransition(DOT_SYMBOLS[NONDOT_SYMBOLS.index(curr_read_pair[0])],
+                            second_branch_start + 1, DOT_SYMBOLS[NONDOT_SYMBOLS.index(curr_write_pair[0])], 'R'))
                 
                 # loop right all the way to the end of the second tape
                 for nondot_symbol in NONDOT_SYMBOLS:
-                    TM.add_transition(second_branch_start, TuringMachineTransition(nondot_symbol, second_branch_start, nondot_symbol, 'R'))
+                    TM.add_transition(second_branch_start + 1, TuringMachineTransition(nondot_symbol, 
+                        second_branch_start + 1, nondot_symbol, 'R'))
+                TM.add_transition(second_branch_start + 1, TuringMachineTransition(BABAMBABAM, second_branch_start + 2, BABAMBABAM, 'R'))
+                for nondot_symbol in NONDOT_SYMBOLS:
+                    TM.add_transition(second_branch_start + 2, TuringMachineTransition(nondot_symbol, 
+                        second_branch_start + 2, nondot_symbol, 'R'))
+                for dot_symbol in DOT_SYMBOLS:
+                    TM.add_transition(second_branch_start + 2, TuringMachineTransition(dot_symbol, 
+                        second_branch_start + 2, dot_symbol, 'R'))
+                
+                second_branch_continued = second_branch_start + 2
                 # come back to the left of the BABAMBABAM(at the end of the second tape)
-                TM.add_transition(second_branch_start, TuringMachineTransition(BABAMBABAM, second_branch_start + 1, BABAMBABAM, 'L'))
+                TM.add_transition(second_branch_continued, TuringMachineTransition(BABAMBABAM, second_branch_continued + 1, BABAMBABAM, 'L'))
 
                 ## now we begin moving right to left and moving the heads of the tapes
                 # loop left until we encounter a dotted symbol
                 for nondot_symbol in NONDOT_SYMBOLS:
-                    TM.add_transition(second_branch_start + 1, TuringMachineTransition(nondot_symbol, second_branch_start + 1, nondot_symbol, 'L'))
+                    TM.add_transition(second_branch_continued + 1, TuringMachineTransition(nondot_symbol, second_branch_continued + 1, nondot_symbol, 'L'))
 
                 # go past the dotted symbol to the right
                 for dot_symbol in DOT_SYMBOLS:
-                    TM.add_transition(second_branch_start + 1, TuringMachineTransition(dot_symbol, second_branch_start + 2, dot_symbol, 'R'))
+                    TM.add_transition(second_branch_continued + 1, TuringMachineTransition(dot_symbol, second_branch_continued + 2, dot_symbol, 'R'))
                 # come back to it...
                 for nondot_symbol in NONDOT_SYMBOLS:
-                    TM.add_transition(second_branch_start + 2, TuringMachineTransition(nondot_symbol, second_branch_start + 3, nondot_symbol, 'L'))
-                TM.add_transition(second_branch_start + 2, TuringMachineTransition(BABAMBABAM, second_branch_start + 3, BABAMBABAM, 'L'))
+                    TM.add_transition(second_branch_continued + 2, TuringMachineTransition(nondot_symbol, second_branch_continued + 3, nondot_symbol, 'L'))
+                TM.add_transition(second_branch_continued + 2, TuringMachineTransition(BABAMBABAM, second_branch_continued + 3, BABAMBABAM, 'L'))
                 
                 ## how the next states are configured depends on whether the second head is moving left or right
-                second_head_move_point = second_branch_start + 3
+                second_head_move_point = second_branch_continued + 3
                 # the movement will be all the same from this point despite the movement direction
                 common_point_1 = second_head_move_point + 5
                 
