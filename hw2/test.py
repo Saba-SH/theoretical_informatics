@@ -31,6 +31,8 @@ def main():
         strings += lists[i]
         
     for s in strings:
+        # if len(TTTM.state_transitions) > 2 or len(TTTM.state_transitions[0]) > 6:
+        #     continue
         tm_run = TM.run(s)
         tttm_run = TTTM.run(s)
         TM.reset()
@@ -41,7 +43,11 @@ def main():
         if tm_run[-2:] != '-1' and tttm_run[-2:] != '-1':
             # print("\"" + s + "\" ACCEPTED BY BOTH")
             continue
+        print(TTTM.to_string() + "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n" + tttm_run)
+        print(TM.to_string() + "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n" + tm_run)
         print("COMPARISON FAILED ON STRING \"" + s + "\"")
+        print("||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||")
+        break
 
 if __name__ == "__main__":
     main()

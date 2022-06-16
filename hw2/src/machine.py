@@ -431,6 +431,10 @@ class TwoTapeTuringMachine:
         curr_state_index = 0
         run_result = ""
         while True:
+            if curr_state_index == len(self.state_transitions) - 1:
+                run_result += str(len(self.state_transitions) - 1)
+                break
+
             while len(self.tape1) <= self.head1:
                 self.tape1.append(SYMBOL_EMPTY)
             while len(self.tape2) <= self.head2:
@@ -472,3 +476,14 @@ class TwoTapeTuringMachine:
         self.tape2 = []
         self.head1 = 0
         self.head2 = 0
+
+    def to_string(self):
+        res = ""
+        res += str(len(self.state_transitions)) + "\n"
+        for i in range(len(self.state_transitions) - 1):
+            res += str(len(self.state_transitions[i]))
+            for transition_pair in self.state_transitions[i]:
+                res += " " + transition_pair[0] + " " + transition_pair[1] + " " + str(self.state_transitions[i][transition_pair][0]) + " " + self.state_transitions[i][transition_pair][1][0] + " " + self.state_transitions[i][transition_pair][1][1] + " " + self.state_transitions[i][transition_pair][2][0] + " " + self.state_transitions[i][transition_pair][2][1]
+            res += "\n"
+            
+        return res
