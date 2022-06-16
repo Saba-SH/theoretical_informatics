@@ -8,9 +8,9 @@ chars = [SYMBOL_EMPTY, '0', '1']
 
 
 def main():
-    for i in range(500):
+    for i in range(3200):
         f = open(PREFIX + str(i), "w")
-        n_states = randrange(1, 6)
+        n_states = randrange(1, 64)
         f.write(str(n_states) + "\n")
         
         for j in range(n_states - 1):
