@@ -431,10 +431,14 @@ class TwoTapeTuringMachine:
                 for nondot_symbol in NONDOT_SYMBOLS:
                     TM.add_transition(common_point_2, TuringMachineTransition(nondot_symbol, common_point_2, nondot_symbol, 'L'))
                 # go to the final state of this transition
-                TM.add_transition(common_point_2, TuringMachineTransition(BABAMBABAM, common_point_2 + 1, BABAMBABAM, 'L'))
+                TM.add_transition(common_point_2, TuringMachineTransition(BABAMBABAM, common_point_2 + 1, BABAMBABAM, 'R'))
                 # make a transition to the state that the two-tape machine wanted to transition to
-                TM.add_transition(common_point_2 + 1, TuringMachineTransition(BABAMBABAM, STATE_OFFSET + curr_target_state * STATES_PER_STATE,
-                            BABAMBABAM, 'L'))
+                for nondot_symbol in NONDOT_SYMBOLS:
+                    TM.add_transition(common_point_2 + 1, TuringMachineTransition(nondot_symbol, STATE_OFFSET + curr_target_state * STATES_PER_STATE,
+                            nondot_symbol, 'L'))
+                for dot_symbol in DOT_SYMBOLS:
+                    TM.add_transition(common_point_2 + 1, TuringMachineTransition(dot_symbol, STATE_OFFSET + curr_target_state * STATES_PER_STATE,
+                            dot_symbol, 'L'))
             
         # this will be the accept state
         TM.add_state()

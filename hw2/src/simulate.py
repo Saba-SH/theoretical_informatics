@@ -16,7 +16,7 @@ def main():
 
     input_string = input()
 
-    print(TM.run(input_string))
+    print(TM.run(input_string).strip())
 
 
 if __name__ == "__main__":
