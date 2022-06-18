@@ -2,6 +2,7 @@ import sys
 from src.machine import TuringMachine, TuringMachineTransition, TwoTapeTuringMachine, TwoTapeTuringMachineTransition
 
 def main():
+    # take two-tape machine as input
     n_states = int(input())
 
     TTTM = TwoTapeTuringMachine()
@@ -13,9 +14,11 @@ def main():
         n_transitions = int(info[0])
         for j in range(n_transitions):
             TTTM.add_transition(i, TwoTapeTuringMachineTransition(info[1 + j * 7], info[2 + j * 7], int(info[3 + j * 7]), info[4 + j * 7], info[5 + j * 7], info[6 + j * 7], info[7 + j * 7]))
-
+    #
+    # convert the machine to single tape
     TM = TTTM.to_single_tape()
-
+    #
+    # generate all strings of length at most first command-line argument
     strings = ['']
     lists = []
     
@@ -29,7 +32,8 @@ def main():
             lists[i].append(s + '0')
             lists[i].append(s + '1')
         strings += lists[i]
-        
+    #
+    # run both the single-tape and two-tape machine and compare their outputs
     for s in strings:
         # if len(TTTM.state_transitions) > 2 or len(TTTM.state_transitions[0]) > 6:
         #     continue
@@ -48,6 +52,7 @@ def main():
         print("COMPARISON FAILED ON STRING \"" + s + "\"")
         print("||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||")
         break
+    # 
 
 if __name__ == "__main__":
     main()
