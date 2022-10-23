@@ -1,3 +1,4 @@
+import sys
 from random import randrange
 from src.machine import SYMBOL_EMPTY
 PREFIX = "machines/"
@@ -8,9 +9,9 @@ chars = [SYMBOL_EMPTY, '0', '1']
 
 
 def main():
-    for i in range(3200):
+    for i in range(int(sys.argv[1])):
         f = open(PREFIX + str(i), "w")
-        n_states = randrange(1, 64)
+        n_states = randrange(1, int(sys.argv[2]))
         f.write(str(n_states) + "\n")
         
         for j in range(n_states - 1):
